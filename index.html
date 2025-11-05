@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SerPlay by J</title>
+  <style>
+    body { font-family: monospace; background: #0d1117; color: #00ff99; padding: 20px; }
+    pre { background: #161b22; padding: 10px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Live Server Data</h1>
+  <h3>KTA:</h3><pre id="kta"></pre>
+  <h3>SaMim:</h3><pre id="samim"></pre>
+  <h3>IDP:</h3><pre id="idp"></pre>
+
+  <script>
+    async function update() {
+      try {
+        const [kta, samim, idp] = await Promise.all([
+          fetch("/api/serKTA").then(r => r.json()),
+          fetch("/api/serSaMim").then(r => r.json()),
+          fetch("/api/serIDP").then(r => r.json())
+        ]);
+        document.getElementById("kta").textContent = JSON.stringify(kta, null, 2);
+        document.getElementById("samim").textContent = JSON.stringify(samim, null, 2);
+        document.getElementById("idp").textContent = JSON.stringify(idp, null, 2);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    update();
+    setInterval(update, 1000);
+  </script>
+</body>
+</html>
